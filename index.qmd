@@ -2,10 +2,6 @@
 title: "Water and Sasnitation: NSS 78th Round"
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
 ```{r packages , echo=FALSE, include=FALSE}
 library(arrow)
 library(tidyr)
