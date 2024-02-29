@@ -1,0 +1,66 @@
+---
+title: "Water and Sasnitation: NSS 78th Round"
+---
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+
+```{r packages , echo=FALSE, include=FALSE}
+library(arrow)
+library(tidyr)
+library(dplyr)
+library(pollster)
+library(knitr)
+library(kableExtra)
+library(gt)
+```
+
+```{r include=FALSE}
+# | echo: false
+mis78_wash=read_parquet("data/mis78_wash.parquet")
+```
+
+```{r}
+# | include: false
+
+rbind(mis78_wash%>%
+  crosstab(y=sanitation_system,x=sector,weight = multiplier.y)%>%
+  select(sector,Sewer,`Septic Tank`,`Twin Pit`,`Single Pit`,`Open Pit`,`Composting Pit`,Others,`No Latrine`),
+  mis78_wash%>%
+  crosstab(y=sanitation_system,x=overall,weight = multiplier.y)%>%
+  rename("sector"="overall")%>%
+  select(sector,Sewer,`Septic Tank`,`Twin Pit`,`Single Pit`,`Open Pit`,`Composting Pit`,Others,`No Latrine`))%>%
+    kable(format = "html",
+          digits = 1,
+          caption = "Type of Sanitation System",
+          col.names = c("","Sewer","Septic Tank","Twin Pit","Single Pit","Open Pit","Composting Pit","Others","No Latrine"),booktabs=TRUE)
+```
+
+```{r}
+rbind(mis78_wash%>%
+  crosstab(y=latrine_access_recoded,x=sector,weight = multiplier.y)%>%
+  select(sector,`Exclusive for Household`,`Shared use in Building`,`Paid PT/CT`,`Unpaid PT/CT`, Others,`No Latrine`),
+  mis78_wash%>%
+  crosstab(y=latrine_access_recoded,x=overall,weight = multiplier.y)%>%
+  rename("sector"="overall")%>%
+  select(sector,`Exclusive for Household`,`Shared use in Building`,`Paid PT/CT`,`Unpaid PT/CT`, Others,`No Latrine`))%>%
+  kable(format = "html",
+        digits = 1,
+        caption = "Access to Toilet",
+        col.names = c("","Exclusive for Household","Shared use in Building","Paid PT/CT","Unpaid PT/CT","Others","No Latrine"),booktabs=TRUE)
+```
+
+```{r}
+rbind(mis78_wash%>%
+  crosstab(y=dw_source_recoded,x=sector,weight = multiplier.y)%>%
+  select(1,3,6,4,9,10,2,7,8,5),
+  mis78_wash%>%
+  crosstab(y=dw_source_recoded,x=overall,weight = multiplier.y)%>%
+  rename("sector"="overall")%>%
+  select(1,3,6,4,9,10,2,7,8,5))%>%
+  kable(format = "html",
+        digits = 1,
+        caption = "Source of Drinking Water",
+        col.names = c("","Exclusive Piped Water","Shared Piped Water","Handpump","Tubewell","Well","Bottled Water","Spring/Rainwater/Surfacewater","Tanker","Others"),booktabs=TRUE)
+```
