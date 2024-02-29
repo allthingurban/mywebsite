@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>mywebsite</title>
+<title>mywebsite - Water and Sasnitation: NSS 78th Round</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -123,6 +123,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./nss76.html" rel="" target="">
+ <span class="menu-text">nss76</span></a>
+  </li>  
 </ul>
             <div class="quarto-navbar-tools ms-auto">
 </div>
@@ -142,7 +146,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">mywebsite</h1>
+<h1 class="title">Water and Sasnitation: NSS 78th Round</h1>
 </div>
 
 
@@ -157,12 +161,206 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>This is a Quarto website.</p>
-<p>To learn more about Quarto websites visit <a href="https://quarto.org/docs/websites" class="uri">https://quarto.org/docs/websites</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># | include: false</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(mis78_wash<span class="sc">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crosstab</span>(<span class="at">y=</span>sanitation_system,<span class="at">x=</span>sector,<span class="at">weight =</span> multiplier.y)<span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sector,Sewer,<span class="st">`</span><span class="at">Septic Tank</span><span class="st">`</span>,<span class="st">`</span><span class="at">Twin Pit</span><span class="st">`</span>,<span class="st">`</span><span class="at">Single Pit</span><span class="st">`</span>,<span class="st">`</span><span class="at">Open Pit</span><span class="st">`</span>,<span class="st">`</span><span class="at">Composting Pit</span><span class="st">`</span>,Others,<span class="st">`</span><span class="at">No Latrine</span><span class="st">`</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  mis78_wash<span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crosstab</span>(<span class="at">y=</span>sanitation_system,<span class="at">x=</span>overall,<span class="at">weight =</span> multiplier.y)<span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"sector"</span><span class="ot">=</span><span class="st">"overall"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sector,Sewer,<span class="st">`</span><span class="at">Septic Tank</span><span class="st">`</span>,<span class="st">`</span><span class="at">Twin Pit</span><span class="st">`</span>,<span class="st">`</span><span class="at">Single Pit</span><span class="st">`</span>,<span class="st">`</span><span class="at">Open Pit</span><span class="st">`</span>,<span class="st">`</span><span class="at">Composting Pit</span><span class="st">`</span>,Others,<span class="st">`</span><span class="at">No Latrine</span><span class="st">`</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"html"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">digits =</span> <span class="dv">1</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Type of Sanitation System"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">"Sewer"</span>,<span class="st">"Septic Tank"</span>,<span class="st">"Twin Pit"</span>,<span class="st">"Single Pit"</span>,<span class="st">"Open Pit"</span>,<span class="st">"Composting Pit"</span>,<span class="st">"Others"</span>,<span class="st">"No Latrine"</span>),<span class="at">booktabs=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<caption>Type of Sanitation System</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sewer</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Septic Tank</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Twin Pit</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Single Pit</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Open Pit</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Composting Pit</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Others</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">No Latrine</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Rural</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">35.9</td>
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">27.7</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">0.3</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">21.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Urban</td>
+<td style="text-align: right;">36.2</td>
+<td style="text-align: right;">46.5</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">10.6</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">2.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">12.8</td>
+<td style="text-align: right;">39.3</td>
+<td style="text-align: right;">8.4</td>
+<td style="text-align: right;">22.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">15.4</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(mis78_wash<span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crosstab</span>(<span class="at">y=</span>latrine_access_recoded,<span class="at">x=</span>sector,<span class="at">weight =</span> multiplier.y)<span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sector,<span class="st">`</span><span class="at">Exclusive for Household</span><span class="st">`</span>,<span class="st">`</span><span class="at">Shared use in Building</span><span class="st">`</span>,<span class="st">`</span><span class="at">Paid PT/CT</span><span class="st">`</span>,<span class="st">`</span><span class="at">Unpaid PT/CT</span><span class="st">`</span>, Others,<span class="st">`</span><span class="at">No Latrine</span><span class="st">`</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  mis78_wash<span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crosstab</span>(<span class="at">y=</span>latrine_access_recoded,<span class="at">x=</span>overall,<span class="at">weight =</span> multiplier.y)<span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"sector"</span><span class="ot">=</span><span class="st">"overall"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sector,<span class="st">`</span><span class="at">Exclusive for Household</span><span class="st">`</span>,<span class="st">`</span><span class="at">Shared use in Building</span><span class="st">`</span>,<span class="st">`</span><span class="at">Paid PT/CT</span><span class="st">`</span>,<span class="st">`</span><span class="at">Unpaid PT/CT</span><span class="st">`</span>, Others,<span class="st">`</span><span class="at">No Latrine</span><span class="st">`</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"html"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">digits =</span> <span class="dv">1</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">caption =</span> <span class="st">"Access to Toilet"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">"Exclusive for Household"</span>,<span class="st">"Shared use in Building"</span>,<span class="st">"Paid PT/CT"</span>,<span class="st">"Unpaid PT/CT"</span>,<span class="st">"Others"</span>,<span class="st">"No Latrine"</span>),<span class="at">booktabs=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<caption>Access to Toilet</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Exclusive for Household</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Shared use in Building</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Paid PT/CT</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Unpaid PT/CT</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Others</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">No Latrine</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Rural</td>
+<td style="text-align: right;">68.8</td>
+<td style="text-align: right;">8.7</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">21.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Urban</td>
+<td style="text-align: right;">80.8</td>
+<td style="text-align: right;">13.0</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">2.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">72.6</td>
+<td style="text-align: right;">10.1</td>
+<td style="text-align: right;">0.3</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">15.4</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(mis78_wash<span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crosstab</span>(<span class="at">y=</span>dw_source_recoded,<span class="at">x=</span>sector,<span class="at">weight =</span> multiplier.y)<span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">5</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  mis78_wash<span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crosstab</span>(<span class="at">y=</span>dw_source_recoded,<span class="at">x=</span>overall,<span class="at">weight =</span> multiplier.y)<span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"sector"</span><span class="ot">=</span><span class="st">"overall"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">5</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"html"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">digits =</span> <span class="dv">1</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">caption =</span> <span class="st">"Source of Drinking Water"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">"Exclusive Piped Water"</span>,<span class="st">"Shared Piped Water"</span>,<span class="st">"Handpump"</span>,<span class="st">"Tubewell"</span>,<span class="st">"Well"</span>,<span class="st">"Bottled Water"</span>,<span class="st">"Spring/Rainwater/Surfacewater"</span>,<span class="st">"Tanker"</span>,<span class="st">"Others"</span>),<span class="at">booktabs=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<caption>Source of Drinking Water</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Exclusive Piped Water</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Shared Piped Water</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Handpump</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Tubewell</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Well</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Bottled Water</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Spring/Rainwater/Surfacewater</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Tanker</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Others</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Rural</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: right;">10.9</td>
+<td style="text-align: right;">39.4</td>
+<td style="text-align: right;">12.0</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Urban</td>
+<td style="text-align: right;">61.4</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">8.1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9.8</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">36.6</td>
+<td style="text-align: right;">10.1</td>
+<td style="text-align: right;">29.0</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5.6</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
 </div>
 
