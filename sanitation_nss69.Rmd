@@ -1,0 +1,101 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(foreign)
+library(dplyr)
+library(tidyr)
+library(pollster)
+library(ggplot2)
+library(arrow)
+```
+
+```{r}
+nss_69=read.dta("/media/abhinav/Datahub/Survey/NSSO/NSS_69_SCH_1dot2_Housing/Block - 4 Particulars of living facilities - drinking water, bathroom, sanitation etc - level 4.dta")
+
+nss_69_individual=read.dta("/media/abhinav/Datahub/Survey/NSSO/NSS_69_SCH_1dot2_Housing/Block - 3 Household characteristics - level 2.dta")
+```
+```{r}
+write_parquet(nss_69,"nss_69.parquet")
+```
+
+```{r}
+rbind(nss_69 %>%
+  mutate(latrine_access_recodes=case_when(b4_q23==1~"IHHL",
+                                          b4_q23 %in% c(2,9)~"Shared",
+                                          b4_q23 %in% c(3,4)~"PT/CT",
+                                          b4_q23==5~"No Latrine"),
+         overall_dummy="India")%>%
+  crosstab(x=overall_dummy,y=latrine_access_recodes,weight = Combined_Weight)%>%rename("Sector"="overall_dummy"),
+nss_69 %>%
+  mutate(latrine_access_recodes=case_when(b4_q23==1~"IHHL",
+                                          b4_q23 %in% c(2,9)~"Shared",
+                                          b4_q23 %in% c(3,4)~"PT/CT",
+                                          b4_q23==5~"No Latrine"),
+         Sector=case_when(Sector==1~"Rural",
+                          Sector==2~"Urban"))%>%
+  crosstab(x=Sector,y=latrine_access_recodes,weight = Combined_Weight))
+```
+principal source of drinking water
+(bottled water-01, piped water into dwelling-02, piped water to yard/plot-03, public tap/standpipe-04,
+tube well/borehole-05, well: protected-06, unprotected-07; spring: protected-08, unprotected-09;
+rainwater collection -10, surface water: tank/pond-11, other surface water (river, dam, stream, canal,
+lake, etc.)-12, others (tanker-truck, cart with small tank or drum, etc)-19)
+```{r}
+nss_69 %>% type.convert(as.is=T)%>%
+  mutate(dwsource_recoded=case_when(b4_q1 %in% c(2,3)~"Piped_Water",
+                                    b4_q1 ==4~"Public_Standpost",
+                                    b4_q1 ==5~"Tubewell",
+                                    b4_q1 %in% c(6,7)~"Well",
+                                    b4_q1 %in% c(8,9)~"Spring",
+                                    b4_q1 ==10~"Rainwater",
+                                    b4_q1 %in% c(11,12)~"Surface_Water",
+                                    b4_q1 ==19~"Others",
+                                    b4_q1 ==1~"Bottled Water"),
+         dw_access_recoded=case_when(b4_q4 ==1~"Exclusive",
+                                     b4_q4 %in% c(2,3)~"Shared",
+                                     b4_q4 %in% c(4,5,6,7)~"Community",
+                                     b4_q4 ==9~"Others",),
+         dw_distance_recoded=case_when(b4_q5 %in% c(1,2)~"Within_Dwelling_Premises",
+                                       b4_q5 %in% c(3,4,5,6,7)~"Outside_Dwelling_Premises"))%>%
+   crosstab(x=Sector,y=dw_access_recoded,weight = Combined_Weight)
+```
+```{r}
+nss_69 %>% merge(nss_69_individual%>%select(32,40),by.x="Key_hhold",by.y = "Key_hhold",all.x=TRUE)%>%
+  type.convert(as.is=T)%>%
+  filter(Sector==2)%>%
+  mutate(dwsource_recoded=case_when(b4_q1 %in% c(2,3)~"Piped_Water",
+                                    b4_q1 ==4~"Public_Standpost",
+                                    b4_q1 ==5~"Tubewell",
+                                    b4_q1 %in% c(6,7)~"Well",
+                                    b4_q1 %in% c(8,9)~"Spring",
+                                    b4_q1 ==10~"Rainwater",
+                                    b4_q1 %in% c(11,12)~"Surface_Water",
+                                    b4_q1 ==19~"Others",
+                                    b4_q1 ==1~"Bottled Water"),
+         dw_access_recoded=case_when(b4_q4 ==1~"Exclusive",
+                                     b4_q4 %in% c(2,3)~"Shared",
+                                     b4_q4 %in% c(4,5,6,7)~"Community",
+                                     b4_q4 ==9~"Others",),
+         dw_distance_recoded=case_when(b4_q5 %in% c(1,2)~"Within_Dwelling_Premises",
+                                       b4_q5 %in% c(3,4,5,6,7)~"Outside_Dwelling_Premises"))%>%
+   crosstab(y=dwsource_recoded,x=b3_q15,weight = Combined_Weight)
+```
+```{r}
+nss_69 %>%
+  merge(nss_69_individual%>%select(32,40),by.x="Key_hhold",by.y = "Key_hhold",all.x=TRUE)%>%
+  type.convert(as.is=T)%>%
+  filter(Sector==2)%>%
+  mutate(latrine_access_recodes=case_when(b4_q23==1~"IHHL",
+                                          b4_q23 %in% c(2,9)~"Shared",
+                                          b4_q23 %in% c(3,4)~"PT/CT",
+                                          b4_q23==5~"No Latrine"))%>%
+  crosstab(x=b3_q15,y=latrine_access_recodes,weight = Combined_Weight)
+```
+
