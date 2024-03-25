@@ -3,18 +3,33 @@ project:
   output-dir: docs
 
 website:
-  title: "mywebsite"
-  navbar:
-    left:
+  title: "Water and Sanitation in India"
+  
+  navbar: 
+    right:
       - href: index.qmd
         text: Home
-      - about.qmd
-
+  sidebar:
+    style: docked
+    search: false
+    collapse-level: 1
+    border: true
+    contents:
+      - section: "Sanitation"
+        contents:
+        - nss69.qmd
+        - nss76.qmd
+        - nss78.qmd
+        
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
+    grid:
+      sidebar-width: 300px
+      body-width: 1500px
+      margin-width: 300px
 
 editor: visual
 

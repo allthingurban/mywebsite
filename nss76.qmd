@@ -1,0 +1,47 @@
+---
+title: "NSS(2017-18)"
+---
+
+```{r packages , echo=FALSE, include=FALSE}
+library(foreign)
+library(dplyr)
+library(tidyr)
+library(pollster)
+library(ggplot2)
+library(arrow)
+library(knitr)
+library(kableExtra)
+library(gt)
+```
+
+```{r include=FALSE}
+nss76_wash=read_parquet("data/nss76_data.parquet")
+```
+
+```{r}
+rbind(nss76_wash %>%
+  mutate(latrine_access_recodes=case_when(latrine_access ==1~"Exclusive for Household",
+                                    latrine_access ==2~"Shared use in Building",
+                                    latrine_access ==3~"Unpaid PT/CT",
+                                    latrine_access ==4~"Paid PT/CT",
+                                    latrine_access ==9~"Others",
+                                    latrine_access ==5~"No Latrine"),
+         overall_dummy="India")%>%
+    crosstab(x=overall_dummy,y=latrine_access_recodes,weight = multiplier)%>%
+    rename("sector"="overall_dummy"),
+nss76_wash %>%
+  mutate(latrine_access_recodes=case_when(latrine_access ==1~"Exclusive for Household",
+                                    latrine_access ==2~"Shared use in Building",
+                                    latrine_access ==3~"Unpaid PT/CT",
+                                    latrine_access ==4~"Paid PT/CT",
+                                    latrine_access ==9~"Others",
+                                    latrine_access ==5~"No Latrine"),
+         sector=case_when(sector==1~"Rural",
+                          sector==2~"Urban"))%>%
+  crosstab(x=sector,y=latrine_access_recodes,weight = multiplier))%>%
+  select(1,2,6,5,7,4,3)%>%
+  kable(format = "html",
+        digits = 1,
+        caption = "Access to Toilet",
+        booktabs=TRUE)
+```

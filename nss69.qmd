@@ -1,0 +1,46 @@
+---
+title: "NSS(2012-13)"
+---
+
+```{r packages , echo=FALSE, include=FALSE}
+library(foreign)
+library(dplyr)
+library(tidyr)
+library(pollster)
+library(ggplot2)
+library(arrow)
+library(knitr)
+library(kableExtra)
+library(gt)
+```
+
+```{r include=FALSE}
+nss_69_master=read_parquet("./data/nss_69_master_labelled.parquet")
+```
+
+```{r}
+rbind(nss_69_master %>%
+  mutate(latrine_access_recoded=case_when(latrine_access ==1~"Exclusive for Household",
+                                    latrine_access ==2~"Shared use in Building",
+                                    latrine_access ==3~"Unpaid PT/CT",
+                                    latrine_access ==4~"Paid PT/CT",
+                                    latrine_access ==9~"Others",
+                                    latrine_access ==5~"No Latrine"),
+         overall_dummy="India")%>%
+  crosstab(x=overall_dummy,y=latrine_access_recoded,weight = Combined_Weight)%>%rename("Sector"="overall_dummy"),
+nss_69_master %>%
+  mutate(latrine_access_recoded=case_when(latrine_access ==1~"Exclusive for Household",
+                                    latrine_access ==2~"Shared use in Building",
+                                    latrine_access ==3~"Unpaid PT/CT",
+                                    latrine_access ==4~"Paid PT/CT",
+                                    latrine_access ==9~"Others",
+                                    latrine_access ==5~"No Latrine"),
+         Sector=case_when(Sector==1~"Rural",
+                          Sector==2~"Urban"))%>%
+  crosstab(x=Sector,y=latrine_access_recoded,weight = Combined_Weight))%>%
+  select(1,2,6,5,7,4,3)%>%
+  kable(format = "html",
+        digits = 1,
+        caption = "Access to Toilet",
+        booktabs=TRUE)
+```
