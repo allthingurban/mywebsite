@@ -44,3 +44,33 @@ nss_69_master %>%
         caption = "Access to Toilet",
         booktabs=TRUE)
 ```
+
+```{r echo=FALSE, output=TRUE}
+rbind(nss_69_master %>%
+  mutate(latrine_access_recoded=case_when(latrine_access ==1~"Exclusive for Household",
+                                    latrine_access ==2~"Shared use in Building",
+                                    latrine_access ==3~"Unpaid PT/CT",
+                                    latrine_access ==4~"Paid PT/CT",
+                                    latrine_access ==9~"Others",
+                                    latrine_access ==5~"No Latrine"),
+         overall_dummy="India")%>%
+  crosstab(x=overall_dummy,y=latrine_access_recoded,weight = Combined_Weight,format = "long")%>%rename("Sector"="overall_dummy"),
+nss_69_master %>%
+  mutate(latrine_access_recoded=case_when(latrine_access ==1~"Exclusive for Household",
+                                    latrine_access ==2~"Shared use in Building",
+                                    latrine_access ==3~"Unpaid PT/CT",
+                                    latrine_access ==4~"Paid PT/CT",
+                                    latrine_access ==9~"Others",
+                                    latrine_access ==5~"No Latrine"),
+         Sector=case_when(Sector==1~"Rural",
+                          Sector==2~"Urban"))%>%
+  crosstab(x=Sector,y=latrine_access_recoded,weight = Combined_Weight,format = "long"))%>%
+  mutate(latrine_access_recoded = factor(latrine_access_recoded, levels=c("Exclusive for Household", "Shared use in Building", "Unpaid PT/CT", "Paid PT/CT", "Others", "No Latrine")))%>%
+  ggplot(aes(x=Sector,y=pct,fill=latrine_access_recoded))+
+  geom_bar(stat = "identity")+
+  geom_text(aes(label = ifelse(pct > 5, round(pct,1),"")),position = position_stack(vjust = 0.7)) +
+  xlab("Type of Area")+
+  ylab("Percent Households")+
+  labs(fill='Access to Latrine')
+```
+
